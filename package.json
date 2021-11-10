@@ -7,8 +7,13 @@
     "start": "node index.js",
     "start:dev": "nodemon index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/https://github.com/sad1go0/rest-api-js.git"
+  },
   "keywords": [],
   "author": "",
+  "homepage": "https://github.com/https://github.com/sad1go0/rest-api-js/#readme",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -26,6 +31,7 @@
   },
   "devDependencies": {
     "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
     "supertest": "^6.1.6"
   }
 }

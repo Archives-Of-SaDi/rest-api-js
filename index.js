@@ -6,6 +6,7 @@ app.use(express.json());
 
 app.use('/', require('./routes/root.routes'));
 app.use('/api/categoires', require('./routes/categories.routes'));
+app.use('/api/customers', require('./routes/customers.routes'));
 
 connect('mongodb://localhost/rest-api-js')
   .then(() => {
