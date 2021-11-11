@@ -1,4 +1,6 @@
 const { Router } = require('express');
+const { pick } = require('lodash');
+const { genSalt, hash } = require('bcrypt');
 const { User, validateUser } = require('../models/user.models');
 const router = Router();
 
@@ -9,15 +11,14 @@ router.post('/', async (req, res) => {
   const isUser = await User.findOne({ email: req.body.email });
   if (isUser) return res.status(400).send('Mavjud bo\'lgan foydalanuvchi');
 
-  let user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  })
+  let user = new User(pick(req.body, ['name', 'email', 'password']));
 
-  user = user.save();
+  const salt = await genSalt();
+  user.password = await hash(user.password, salt);
 
-  res.send(user);
+  user = await user.save();
+
+  res.send(pick(user, ['_id', 'name', 'email']));
 })
 
 module.exports = router;

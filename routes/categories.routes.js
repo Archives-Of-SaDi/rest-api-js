@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { Category, validateCategory } = require('../models/category.model');
+const { auth } = require('../middlewares/auth.middleware');
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/:id', async (req, res) => {
   res.send(category);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { error } = validateCategory(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -24,7 +25,7 @@ router.post('/', async (req, res) => {
   res.send(newCategory);
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   const { error } = validateCategory(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 

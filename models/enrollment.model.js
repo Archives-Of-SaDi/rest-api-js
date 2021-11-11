@@ -1,7 +1,5 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-const { customerSchema } = require('./Customer.model');
-const { courseSchema } = require('./Course.model');
 
 const enrollmentSchema = new Schema({
   customer: {
