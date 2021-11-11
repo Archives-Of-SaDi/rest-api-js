@@ -20,4 +20,4 @@ function validateCategory(category) {
   return schema.validate(category);
 }
 
-module.exports = { Category, validateCategory, categorySchema };
+module.exports = { Category, validateCategory };

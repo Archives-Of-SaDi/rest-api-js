@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Customer, validateCustomer } = require('../models/Customer.model');
+const { Customer, validateCustomer } = require('../models/customer.model');
 
 const router = Router();
 

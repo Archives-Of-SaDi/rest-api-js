@@ -35,4 +35,4 @@ function validateCustomer(customer) {
   return schema.validate(customer);
 }
 
-module.exports = { Customer, validateCustomer, customerSchema };
+module.exports = { Customer, validateCustomer };

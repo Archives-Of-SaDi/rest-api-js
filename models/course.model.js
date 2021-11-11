@@ -1,6 +1,5 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-const { categorySchema } = require('./Category.model');
 
 const courseSchema = new Schema({
   title: {
@@ -54,4 +53,4 @@ function validateCourse(course) {
   return schema.validate(course);
 }
 
-module.exports = { Course, validateCourse, courseSchema };
+module.exports = { Course, validateCourse };

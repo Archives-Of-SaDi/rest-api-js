@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { Enrollment, validateEnrollment } = require('../models/enrollment.model');
-const { Customer } = require('../models/Customer.model');
-const { Course } = require('../models/Course.model');
+const { Customer } = require('../models/customer.model');
+const { Course } = require('../models/course.model');
 const router = Router();
 
 router.get('/', async (req, res) => {
