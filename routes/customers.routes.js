@@ -22,6 +22,8 @@ router.post('/', async (req, res) => {
     name: req.body.name,
     isVip: req.body.isVip,
     phone: req.body.phone,
+    bonusPoints: 0
+
   });
 
   customer = await customer.save();
@@ -38,7 +40,7 @@ router.put('/:id', async (req, res) => {
     {
       name: req.body.name,
       isVip: req.body.isVip,
-      phone: req.body.phone,
+      phone: req.body.phone
     },
     { new: true });
 

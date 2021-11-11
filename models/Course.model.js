@@ -11,7 +11,14 @@ const courseSchema = new Schema({
     maxlength: 255
   },
   category: {
-    type: categorySchema,
+    type: new Schema({
+      name: {
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 50
+      }
+    }),
     required: true
   },
   trainer: {
@@ -47,4 +54,4 @@ function validateCourse(course) {
   return schema.validate(course);
 }
 
-module.exports = { Course, validateCourse };
+module.exports = { Course, validateCourse, courseSchema };

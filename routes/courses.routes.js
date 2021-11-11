@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
     tags: req.body.tags,
     status: req.body.status,
     fee: req.body.fee
-  });
+  }, { new: true });
 
   if (!course) return res.status(404).send('Kurs topilmadi');
 
