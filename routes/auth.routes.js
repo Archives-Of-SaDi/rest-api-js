@@ -2,6 +2,7 @@ const { Router } = require('express');
 const Joi = require('joi');
 const { compare } = require('bcrypt');
 const { User } = require('../models/user.models');
+const { auth } = require('../middlewares/auth.middleware');
 const router = Router();
 
 router.post('/', async (req, res) => {

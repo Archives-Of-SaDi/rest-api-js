@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { Category, validateCategory } = require('../models/category.model');
 const { auth } = require('../middlewares/auth.middleware');
+const { isAdmin } = require('../middlewares/isAdmin.middleware');
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -36,7 +37,7 @@ router.put('/:id', auth, async (req, res) => {
   res.send(category);
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, isAdmin], async (req, res) => {
   let category = await Category.findByIdAndRemove(req.params.id);
   if (!category) return res.status(404).send('Kategoriya topilmadi');
   res.send(category);
