@@ -1,4 +1,4 @@
 {
   "jwtPrivateKey": "123",
-  "db": "mongodb://localhost/rest-api-js"
+  "db": "mongodb://localhost/rest-api-js-tests"
 }
