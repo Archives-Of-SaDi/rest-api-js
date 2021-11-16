@@ -1,10 +1,10 @@
 const { connect } = require('mongoose');
-const { info } = require('winston');
+const { debug } = require('winston');
+const config = require('config');
 
-module.exports = function (app) {
-  connect('mongodb://localhost/rest-api-js', { useUnifiedTopology: true })
+module.exports = function () {
+  connect(config.get('db'), { useUnifiedTopology: true })
     .then(() => {
-      const PORT = process.env.PORT || 3000;
-      app.listen(PORT, () => info(`App has been started on ${PORT} port...`));
+      debug('Connected to mongodb');
     })
 }
