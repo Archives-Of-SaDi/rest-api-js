@@ -24,6 +24,7 @@ router.post('/', auth, async (req, res) => {
   let newCategory = new Category({
     name: req.body.name
   });
+
   newCategory = await newCategory.save();
   res.send(newCategory);
 })

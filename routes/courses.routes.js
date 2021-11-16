@@ -1,6 +1,9 @@
 const { Router } = require('express');
+const { Types: { ObjectId: { isValid } } } = require('mongoose');
 const { Course, validateCourse } = require('../models/course.model');
 const { Category } = require('../models/category.model');
+const { auth } = require('../middlewares/auth.middleware');
+const { isAdmin } = require('../middlewares/isAdmin.middleware');
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -9,12 +12,13 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
+  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
   const course = await Course.findById(req.params.id);
   if (!course) return res.status(404).send('Kurs topilmadi');
   res.send(course);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { error } = validateCourse(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -37,7 +41,8 @@ router.post('/', async (req, res) => {
   res.send(course);
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
+  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
   const { error } = validateCourse(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -61,7 +66,8 @@ router.put('/:id', async (req, res) => {
   res.send(course);
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, isAdmin], async (req, res) => {
+  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
   const course = await Course.findByIdAndDelete(req.params.id);
   if (!course) return res.status(404).send('Kurs topilmadi');
   res.send(course);

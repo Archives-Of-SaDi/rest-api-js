@@ -1,6 +1,8 @@
 const { Router } = require('express');
+const { Types: { ObjectId: { isValid } } } = require('mongoose');
 const { Customer, validateCustomer } = require('../models/customer.model');
-
+const { auth } = require('../middlewares/auth.middleware');
+const { isAdmin } = require('../middlewares/isAdmin.middleware');
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -9,12 +11,13 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
+  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
   const customer = await Customer.findById(req.params.id);
   if (!customer) return res.status(404).send('Mijoz topilmadi');
   res.send(customer);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { error } = validateCustomer(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -23,15 +26,14 @@ router.post('/', async (req, res) => {
     isVip: req.body.isVip,
     phone: req.body.phone,
     bonusPoints: 0
-
   });
 
   customer = await customer.save();
-
   res.send(customer);
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
+  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
   const { error } = validateCustomer(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -48,7 +50,8 @@ router.put('/:id', async (req, res) => {
   res.send(customer);
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, isAdmin], async (req, res) => {
+  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
   const customer = await Customer.findByIdAndRemove(req.params.id);
   if (!customer) return res.status(404).send('Mijoz topilmadi')
   res.send(customer);
