@@ -18,48 +18,56 @@ describe('/api/customers', () => {
     it('should return all customers', async () => {
       await Customer.collection.insertMany([
         {
-          name: 'James',
-          phone: '+123456789',
+          name: 'Sayidulloh',
+          phone: '+998999090310',
+          isVip: false,
+          bonusPoints: 0
         },
         {
-          name: 'Robert',
-          phone: '+123456789',
+          name: 'Sayidulloh',
+          phone: '+998999090310',
+          isVip: false,
+          bonusPoints: 0
         },
         {
-          name: 'Johnson',
-          phone: '+123456789',
+          name: 'Sayidulloh',
+          phone: '+998999090310',
+          isVip: false,
+          bonusPoints: 0
         }
       ])
 
-      const response = await request(server).get('/api/customers');
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBe(3);
-      expect(response.body.some(c => c.name === 'James')).toBeTruthy();
+      const res = await request(server).get('/api/customers');
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(3);
+      expect(res.body.some(c => c.name === 'Sayidulloh')).toBeTruthy();
     })
   })
 
   describe('GET /:id', () => {
-    it('should return 404 if invalid id is given', async () => {
-      const response = await request(server).get('/api/customers/123');
-      expect(response.status).toBe(404);
+    it('should return 404 if invalid objectid is given', async () => {
+      const res = await request(server).get('/api/customers/123');
+      expect(res.status).toBe(400);
     })
 
-    it('should return 404 if no customer with the id exist', async () => {
+    it('should return 404 if invalid id is given', async () => {
       const customerId = ObjectId();
-      const response = await request(server).get('/api/customers/' + customerId);
-      expect(response.status).toBe(404);
+      const res = await request(server).get('/api/customers/' + customerId);
+      expect(res.status).toBe(404);
     })
 
     it('should return a customer if valid id is given', async () => {
       const customer = new Customer({
-        name: 'James',
-        phone: '+123456789',
+        name: 'Sayidulloh',
+        phone: '+998999090310',
+        isVip: false,
+        bonusPoints: 0
       });
       await customer.save();
 
-      const response = await request(server).get('/api/customers/' + customer._id);
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('name', 'James');
+      const res = await request(server).get('/api/customers/' + customer._id);
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('name', 'Sayidulloh');
     })
   })
 
@@ -71,20 +79,20 @@ describe('/api/customers', () => {
       return await request(server)
         .post('/api/customers')
         .set('x-auth-token', token)
-        .send(body);
+        .send(body)
     }
 
     beforeEach(() => {
       token = new User().generateAuthToken();
       body = {
-        name: 'James',
+        name: 'Sayidulloh',
+        phone: '+998999090310',
         isVip: false,
-        phone: '+123456789',
         bonusPoints: 0
-      };
+      }
     })
 
-    it('should return 401 if user is not logged in', async () => {
+    it('should return 401 if is not logged in', async () => {
       token = '';
       const res = await execute();
       expect(res.status).toBe(401);
@@ -92,8 +100,10 @@ describe('/api/customers', () => {
 
     it('should return 400 if customer name is less than 5 characters', async () => {
       body = {
-        name: 'John',
-        phone: '+123456789',
+        name: 'SaDi',
+        phone: '+998999090310',
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
@@ -102,7 +112,9 @@ describe('/api/customers', () => {
     it('should return 400 if customer name is more than 50 characters', async () => {
       body = {
         name: new Array(52).join('c'),
-        phone: '+123456789',
+        phone: '+998999090310',
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
@@ -110,8 +122,10 @@ describe('/api/customers', () => {
 
     it('should return 400 if customer phone is less than 5 characters', async () => {
       body = {
-        name: 'James',
-        phone: '+12',
+        name: 'Sayidulloh',
+        phone: '+99',
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
@@ -119,23 +133,25 @@ describe('/api/customers', () => {
 
     it('should return 400 if customer phone is more than 50 characters', async () => {
       body = {
-        name: 'James',
-        phone: new Array(52).join('9')
+        name: 'Sayidulloh',
+        phone: new Array(52).join('c'),
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
     })
 
-    it('should save the customer if it is valid', async () => {
+    it('should save the category if it is valid', async () => {
       await execute();
-      const customer = await Customer.find({ name: 'James' });
-      expect(customer).not.toBeNull();
+      const category = await Customer.find({ name: 'Sayidulloh' });
+      expect(category).not.toBeNull();
     })
 
-    it('should return the customer if it is valid', async () => {
+    it('should return the category if it is saved', async () => {
       const res = await execute();
       expect(res.body).toHaveProperty('_id');
-      expect(res.body).toHaveProperty('name', 'James');
+      expect(res.body).toHaveProperty('name', 'Sayidulloh');
     })
   })
 
@@ -144,43 +160,46 @@ describe('/api/customers', () => {
     let body;
 
     const execute = async () => {
+      const customerId = ObjectId();
       return await request(server)
-        .post('/api/customers')
+        .put('/api/customers/' + customerId)
         .set('x-auth-token', token)
-        .send(body);
+        .send(body)
     }
 
     beforeEach(() => {
       token = new User().generateAuthToken();
       body = {
-        name: 'James',
+        name: 'Sayidulloh',
+        phone: '+998999090310',
         isVip: false,
-        phone: '+123456789',
         bonusPoints: 0
-      };
+      }
     })
 
-    it('should return 401 if user is not logged in', async () => {
+    it('should return 401 if is not logged in', async () => {
       token = '';
       const res = await execute();
       expect(res.status).toBe(401);
     })
 
-    it('should return 404 if invalid id is given', async () => {
-      const response = await request(server).get('/api/customers/123');
-      expect(response.status).toBe(404);
+    it('should return 404 if invalid objectid is given', async () => {
+      const res = await request(server).get('/api/customers/123');
+      expect(res.status).toBe(400);
     })
 
-    it('should return 404 if no customer with the id exist', async () => {
+    it('should return 404 if invalid id is given', async () => {
       const customerId = ObjectId();
-      const response = await request(server).get('/api/customers/' + customerId);
-      expect(response.status).toBe(404);
+      const res = await request(server).get('/api/customers/' + customerId);
+      expect(res.status).toBe(404);
     })
 
     it('should return 400 if customer name is less than 5 characters', async () => {
       body = {
-        name: 'John',
-        phone: '+123456789',
+        name: 'SaDi',
+        phone: '+998999090310',
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
@@ -189,7 +208,9 @@ describe('/api/customers', () => {
     it('should return 400 if customer name is more than 50 characters', async () => {
       body = {
         name: new Array(52).join('c'),
-        phone: '+123456789',
+        phone: '+998999090310',
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
@@ -197,8 +218,10 @@ describe('/api/customers', () => {
 
     it('should return 400 if customer phone is less than 5 characters', async () => {
       body = {
-        name: 'James',
-        phone: '+12',
+        name: 'Sayidulloh',
+        phone: '+99',
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
@@ -206,8 +229,10 @@ describe('/api/customers', () => {
 
     it('should return 400 if customer phone is more than 50 characters', async () => {
       body = {
-        name: 'James',
-        phone: new Array(52).join('9')
+        name: 'Sayidulloh',
+        phone: new Array(52).join('c'),
+        isVip: false,
+        bonusPoints: 0
       }
       const res = await execute();
       expect(res.status).toBe(400);
@@ -215,14 +240,8 @@ describe('/api/customers', () => {
 
     it('should save the customer if it is valid', async () => {
       await execute();
-      const customer = await Customer.find({ name: 'James' });
-      expect(customer).not.toBeNull();
-    })
-
-    it('should return the customer if it is valid', async () => {
-      const res = await execute();
-      expect(res.body).toHaveProperty('_id');
-      expect(res.body).toHaveProperty('name', 'James');
+      const category = await Customer.find({ name: 'Dasturlash' });
+      expect(category).not.toBeNull();
     })
   })
 
@@ -240,27 +259,27 @@ describe('/api/customers', () => {
       token = new User().generateAuthToken();
     })
 
-    it('should return 401 if user is not logged in', async () => {
+    it('should return 401 if is not logged in', async () => {
       token = '';
       const res = await execute();
       expect(res.status).toBe(401);
     })
 
+    it('should return 400 if invalid objectid is given', async () => {
+      const res = await request(server).get('/api/customers/123');
+      expect(res.status).toBe(400);
+    })
+
     it('should return 404 if invalid id is given', async () => {
-      const response = await request(server).get('/api/customers/123');
-      expect(response.status).toBe(404);
-    })
-
-    it('should return 404 if no customer with the id exist', async () => {
       const customerId = ObjectId();
-      const response = await request(server).get('/api/customers/' + customerId);
-      expect(response.status).toBe(404);
+      const res = await request(server).get('/api/customers/' + customerId);
+      expect(res.status).toBe(404);
     })
 
-    it('should delete the customer if it is valid', async () => {
+    it('should delete the category if it is valid', async () => {
       const res = await execute();
-      const customer = await Customer.findOne({ _id: res._id });
-      expect(customer).toBeNull();
+      const category = await Customer.findById(res._id);
+      expect(category).toBeNull();
     })
   })
 })

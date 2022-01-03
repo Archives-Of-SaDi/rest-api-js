@@ -4,7 +4,7 @@ const { Course } = require('../../../models/course.model');
 const { User } = require('../../../models/user.models');
 let server;
 
-describe('/api/courses', () => {
+describe('/api/categories', () => {
   beforeEach(() => {
     server = require('../../../index');
   })
@@ -15,232 +15,127 @@ describe('/api/courses', () => {
   })
 
   describe('GET /', () => {
-    it('should return all courses', async () => {
+    it('should return all categories', async () => {
       const categoryId = ObjectId();
       await Course.collection.insertMany([
         {
-          title: 'Web',
+          title: 'JavaScript',
           category: {
             _id: categoryId,
             name: 'Dasturlash'
           },
           trainer: 'Abbasov Sayidulloh',
-          tags: ['dasturlash', 'web'],
+          tags: ['web', 'js'],
           status: 'Active',
           fee: 10
         },
         {
-          title: 'Mobile',
+          title: 'JavaScript',
           category: {
             _id: categoryId,
             name: 'Dasturlash'
           },
           trainer: 'Abbasov Sayidulloh',
-          tags: ['dasturlash', 'mobile'],
-          status: 'Active',
-          fee: 15
-        },
-        {
-          title: '3D',
-          category: {
-            _id: categoryId,
-            name: 'Dizayn'
-          },
-          trainer: 'Abbasov Sayidulloh',
-          tags: ['dizayn', '3d'],
+          tags: ['web', 'js'],
           status: 'Active',
           fee: 10
         },
+        {
+          title: 'JavaScript',
+          category: {
+            _id: categoryId,
+            name: 'Dasturlash'
+          },
+          trainer: 'Abbasov Sayidulloh',
+          tags: ['web', 'js'],
+          status: 'Active',
+          fee: 10
+        }
       ])
 
-      const response = await request(server).get('/api/courses');
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBe(3);
-      expect(response.body.some(c => c.title === 'Web')).toBeTruthy();
+      const res = await request(server).get('/api/courses');
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(3);
+      expect(res.body.some(c => c.title === 'JavaScript')).toBeTruthy();
     })
   })
 
   describe('GET /:id', () => {
-    it('should return 404 if invalid id is given', async () => {
-      const response = await request(server).get('/api/courses/123');
-      expect(response.status).toBe(404);
+    it('should return 404 if invalid objectid is given', async () => {
+      const res = await request(server).get('/api/courses/123');
+      expect(res.status).toBe(400);
     })
 
-    it('should return 404 if no course with the id exist', async () => {
-      const categoryId = ObjectId();
-      const response = await request(server).get('/api/courses/' + categoryId);
-      expect(response.status).toBe(404);
+    it('should return 404 if invalid id is given', async () => {
+      const courseId = ObjectId();
+      const res = await request(server).get('/api/courses/' + courseId);
+      expect(res.status).toBe(404);
     })
 
     it('should return a course if valid id is given', async () => {
       const categoryId = ObjectId();
       const course = new Course({
-        title: 'Web',
+        title: 'JavaScript',
         category: {
           _id: categoryId,
           name: 'Dasturlash'
         },
         trainer: 'Abbasov Sayidulloh',
-        tags: ['dasturlash', 'web'],
+        tags: ['web', 'js'],
         status: 'Active',
         fee: 10
       });
       await course.save();
 
-      const response = await request(server).get('/api/courses/' + course._id);
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('title', 'Web');
+      const res = await request(server).get('/api/courses/' + course._id);
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('title', 'JavaScript');
     })
   })
 
-  // describe('POST /', () => {
-  //   let token;
-  //   let name;
+  describe('POST /', () => {
+    let token;
+    let body;
 
-  //   const execute = async () => {
-  //     return await request(server)
-  //       .post('/api/courses')
-  //       .set('x-auth-token', token)
-  //       .send({ name });
-  //   }
+    const execute = async () => {
+      return await request(server)
+        .post('/api/courses')
+        .set('x-auth-token', token)
+        .send(body)
+    }
 
-  //   beforeEach(() => {
-  //     token = new User().generateAuthToken();
-  //     name = 'dasturlash';
-  //   })
+    beforeEach(() => {
+      const categoryId = ObjectId();
+      token = new User().generateAuthToken();
+      body = {
+        title: 'Node JS',
+        category: {
+          _id: categoryId,
+          name: 'Dasturlash'
+        },
+        trainer: 'Abbasov Sayidulloh',
+        tags: ['web', 'js'],
+        status: 'Active',
+        fee: 10
+      }
+    })
 
-  //   it('should return 401 if user is not logged in', async () => {
-  //     token = '';
-  //     const res = await execute();
-  //     expect(res.status).toBe(401);
-  //   })
+    it('should return 401 if is not logged in', async () => {
+      token = '';
+      const res = await execute();
+      expect(res.status).toBe(401);
+    })
 
-  //   it('should return 404 if invalid id is given', async () => {
-  //     const response = await request(server).get('/api/courses/123');
-  //     expect(response.status).toBe(404);
-  //   })
+    it('should save the category if it is valid', async () => {
+      await execute();
+      const course = await Course.find({ title: 'JavaScript' });
+      expect(course).not.toBeNull();
+    })
 
-  //   it('should return 404 if no customer with the id exist', async () => {
-  //     const categoriesId = ObjectId();
-  //     const response = await request(server).get('/api/courses/' + categoriesId);
-  //     expect(response.status).toBe(404);
-  //   })
-
-  //   it('should return 400 if category name is less than 3 characters', async () => {
-  //     name = '12';
-  //     const res = await execute();
-  //     expect(res.status).toBe(400);
-  //   })
-
-  //   it('should return 400 if category name is more than 50 characters', async () => {
-  //     name = new Array(52).join('c');
-  //     const res = await execute();
-  //     expect(res.status).toBe(400);
-  //   })
-
-  //   it('should save the category if it is valid', async () => {
-  //     await execute();
-  //     const category = await Course.find({ name: 'dasturlash' });
-  //     expect(category).not.toBeNull();
-  //   })
-
-  //   it('should return the category if it is valid', async () => {
-  //     const res = await execute();
-  //     expect(res.body).toHaveProperty('_id');
-  //     expect(res.body).toHaveProperty('name', 'dasturlash');
-  //   })
-  // })
-
-  // describe('PUT /:id', () => {
-  //   let token;
-  //   let name;
-
-  //   const execute = async () => {
-  //     return await request(server)
-  //       .post('/api/courses')
-  //       .set('x-auth-token', token)
-  //       .send({ name });
-  //   }
-
-  //   beforeEach(() => {
-  //     token = new User().generateAuthToken();
-  //     name = 'dasturlash';
-  //   })
-
-  //   it('should return 404 if invalid id is given', async () => {
-  //     const response = await request(server).get('/api/courses/123');
-  //     expect(response.status).toBe(404);
-  //   })
-
-  //   it('should return a category if valid id is given', async () => {
-  //     const category = new Course({ name: 'sun\'iy idrok' });
-  //     await category.save();
-
-  //     const response = await request(server).get('/api/courses/' + category._id);
-  //     expect(response.status).toBe(200);
-  //     expect(response.body).toHaveProperty('name', 'sun\'iy idrok');
-  //   })
-
-  //   it('should return 400 if category name is less than 3 characters', async () => {
-  //     name = '12';
-  //     const res = await execute();
-  //     expect(res.status).toBe(400);
-  //   })
-
-  //   it('should return 400 if category name is more than 50 characters', async () => {
-  //     name = new Array(52).join('c');
-  //     const res = await execute();
-  //     expect(res.status).toBe(400);
-  //   })
-
-  //   it('should save the category if it is valid', async () => {
-  //     await execute();
-  //     const category = await Course.find({ name: 'dasturlash' });
-  //     expect(category).not.toBeNull();
-  //   })
-
-  //   it('should return the category if it is valid', async () => {
-  //     const res = await execute();
-  //     expect(res.body).toHaveProperty('_id');
-  //     expect(res.body).toHaveProperty('name', 'dasturlash');
-  //   })
-  // })
-
-  // describe('DELETE /:id', () => {
-  //   let token;
-
-  //   const execute = async () => {
-  //     const categoryId = ObjectId();
-  //     return await request(server)
-  //       .delete('/api/courses/' + categoryId)
-  //       .set('x-auth-token', token)
-  //   }
-
-  //   beforeEach(() => {
-  //     token = new User().generateAuthToken();
-  //   })
-
-  //   it('should return 401 if user is not logged in', async () => {
-  //     token = '';
-  //     const res = await execute();
-  //     expect(res.status).toBe(401);
-  //   })
-
-  //   it('should return 404 if invalid id is given', async () => {
-  //     const response = await request(server).get('/api/courses/123');
-  //     expect(response.status).toBe(404);
-  //   })
-
-  //   it('should return 404 if no category with the id exist', async () => {
-  //     const categoryId = ObjectId();
-  //     const response = await request(server).get('/api/courses/' + categoryId);
-  //     expect(response.status).toBe(404);
-  //   })
-
-  //   it('should delete the category if it is valid', async () => {
-  //     const res = await execute();
-  //     const category = await Course.findOne({ _id: res._id });
-  //     expect(category).toBeNull();
-  //   })
-  // })
+    it('should return the category if it is saved', async () => {
+      const res = await execute();
+      expect(res.body).toHaveProperty('_id');
+      expect(res.body).toHaveProperty('title', 'Node JS');
+    })
+  })
 })

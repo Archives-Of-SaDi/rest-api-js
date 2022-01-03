@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
+  if (!isValid(req.params.id)) return res.status(400).send('Yaroqsiz id');
   const customer = await Customer.findById(req.params.id);
   if (!customer) return res.status(404).send('Mijoz topilmadi');
   res.send(customer);

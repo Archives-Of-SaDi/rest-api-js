@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
+  if (!isValid(req.params.id)) return res.status(400).send('Yaroqsiz id');
   const category = await Category.findById(req.params.id);
   if (!category) return res.status(404).send('Kategoriya topilmadi');
   res.send(category);

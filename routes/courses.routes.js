@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
+  if (!isValid(req.params.id)) return res.status(400).send('Yaroqsiz id');
   const course = await Course.findById(req.params.id);
   if (!course) return res.status(404).send('Kurs topilmadi');
   res.send(course);
@@ -42,7 +42,7 @@ router.post('/', auth, async (req, res) => {
 })
 
 router.put('/:id', auth, async (req, res) => {
-  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
+  if (!isValid(req.params.id)) return res.status(400).send('Yaroqsiz id');
   const { error } = validateCourse(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -67,7 +67,7 @@ router.put('/:id', auth, async (req, res) => {
 })
 
 router.delete('/:id', [auth, isAdmin], async (req, res) => {
-  if (!isValid(req.params.id)) return res.status(404).send('Yaroqsiz id');
+  if (!isValid(req.params.id)) return res.status(400).send('Yaroqsiz id');
   const course = await Course.findByIdAndDelete(req.params.id);
   if (!course) return res.status(404).send('Kurs topilmadi');
   res.send(course);
