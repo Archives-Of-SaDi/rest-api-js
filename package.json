@@ -1,7 +1,7 @@
 {
   "name": "rest-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple rest-full api for practice",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -12,8 +12,18 @@
     "type": "git",
     "url": "git+https://github.com/https://github.com/sad1go0/rest-api-js.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "rest-full",
+    "rest",
+    "crud",
+    "backend",
+    "api"
+  ],
+  "author": {
+    "name": "Sayidulloh Abbasov",
+    "email": "sayidullohabbasov0909@gmail.com",
+    "url": "https://github.com/sad1go0"
+  },
   "homepage": "https://github.com/https://github.com/sad1go0/rest-api-js/#readme",
   "license": "ISC",
   "dependencies": {
