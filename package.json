@@ -2,10 +2,11 @@
   "name": "rest-api",
   "version": "1.0.0",
   "description": "Simple rest-full api for practice",
-  "main": "index.js",
+  "type": "commonjs",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "nodemon index.js",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "test": "jest --watchAll --coverage"
   },
   "repository": {
