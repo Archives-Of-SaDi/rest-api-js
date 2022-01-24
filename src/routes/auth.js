@@ -3,6 +3,8 @@ const Joi = require('joi');
 const { StatusCodes } = require('http-status-codes')
 const { User } = require('../models/user');
 const { compare } = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 const router = Router();
 
@@ -16,7 +18,12 @@ router.post('/', async (req, res) => {
   const isValidPassword = await compare(req.body.password, user.password);
   if (!isValidPassword) return res.status(StatusCodes.BAD_REQUEST).send('Email or password is invalid');
 
-  res.status(StatusCodes.OK).send(true);
+  const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+
+  res
+    .status(StatusCodes.OK)
+    .header('x-auth-token', token)
+    .send(true);
 })
 
 function validateUser(user) {
