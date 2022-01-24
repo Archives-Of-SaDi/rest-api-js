@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   const customers = await Customer.find();
-  res.send(customers);
+  res.status(StatusCodes.OK).send(customers);
 })
 
 router.get('/:id', async (req, res) => {
@@ -47,14 +47,14 @@ router.put('/:id', async (req, res) => {
     { new: true });
   if (!customer) return res.status(StatusCodes.NOT_FOUND).send('Customer not found');
 
-  res.send(customer);
+  res.status(StatusCodes.OK).send(customer);
 })
 
 router.delete('/:id', async (req, res) => {
   if (!isValid(req.params.id)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
   let customer = await Customer.findByIdAndRemove(req.params.id);
   if (!customer) return res.status(StatusCodes.NOT_FOUND).send('Customer not found');
-  res.send(customer);
+  res.status(StatusCodes.OK).send(customer);
 })
 
 module.exports = router;
