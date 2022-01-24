@@ -8,6 +8,7 @@ const customersRouter = require('./routes/customers');
 const coursesRouter = require('./routes/courses');
 const enrollmentsRouter = require('./routes/enrollments');
 const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 
 // Constants
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/customers', customersRouter);
 app.use('/api/courses', coursesRouter);
 app.use('/api/enrollments', enrollmentsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
 
 mongoose.connect('mongodb://localhost/rest-api', () => {
   const PORT = process.env.PORT || 5000;
