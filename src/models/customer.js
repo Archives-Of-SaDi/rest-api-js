@@ -19,7 +19,8 @@ const customerSchema = new Schema({
     maxlength: 50
   },
   bonusPoints: {
-    type: Number
+    type: Number,
+    default: 0
   }
 })
 
