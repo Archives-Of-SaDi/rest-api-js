@@ -1,5 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const config = require('config');
+
+// Verifying configs
+if (!config.get('jwtPrivateKey')) throw new Error('"privateKey" environment variable is required');
 
 // Import routes
 const rootRouter = require('./routes/root');
