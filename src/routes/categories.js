@@ -1,6 +1,6 @@
 const { Types: { ObjectId: { isValid } } } = require('mongoose');
 const { Router } = require('express');
-const { StatusCodes } = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes');
 const { Category, validateCategory } = require('../models/category');
 const { auth } = require('../middlewares/auth');
 const { admin } = require('../middlewares/admin');
@@ -41,7 +41,7 @@ router.put('/:id', auth, async (req, res) => {
   let category = await Category.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true });
   if (!category) return res.status(StatusCodes.NOT_FOUND).send('Category not found');
 
-  res.status(StatusCodes.OK).send(category)
+  res.status(StatusCodes.OK).send(category);
 })
 
 router.delete('/:id', auth, admin, async (req, res) => {

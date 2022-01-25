@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { StatusCodes } = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes');
 const { User, validateUser } = require('../models/user');
 const { genSalt, hash } = require('bcrypt');
 const { pick } = require('lodash');

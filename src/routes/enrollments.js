@@ -1,6 +1,6 @@
 const { Types: { ObjectId: { isValid } } } = require('mongoose');
 const { Router } = require('express');
-const { StatusCodes } = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes');
 const { Enrollment, validateEnrollment } = require('../models/enrollment');
 const { Course } = require('../models/course');
 const { Customer } = require('../models/customer');
@@ -81,7 +81,7 @@ router.put('/:id', auth, async (req, res) => {
   }, { new: true });
   if (!enrollment) return res.status(StatusCodes.NOT_FOUND).send('Enrollment not found');
 
-  res.status(StatusCodes.OK).send(course)
+  res.status(StatusCodes.OK).send(course);
 })
 
 router.delete('/:id', auth, admin, async (req, res) => {

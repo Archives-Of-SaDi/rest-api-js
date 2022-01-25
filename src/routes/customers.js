@@ -1,6 +1,6 @@
 const { Types: { ObjectId: { isValid } } } = require('mongoose');
 const { Router } = require('express');
-const { StatusCodes } = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes');
 const { Customer, validateCustomer } = require('../models/customer');
 const { auth } = require('../middlewares/auth');
 const { admin } = require('../middlewares/admin');

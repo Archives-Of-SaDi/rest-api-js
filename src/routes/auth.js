@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const Joi = require('joi');
-const { StatusCodes } = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes');
 const { User } = require('../models/user');
 const { compare } = require('bcrypt');
 const jwt = require('jsonwebtoken');
