@@ -1,6 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
+require('express-async-errors');
+
+// Some modules
+const { handlerInternalServerError } = require('./middlewares/handlerInternalServerError');
 
 // Verifying configs
 if (!config.get('jwtPrivateKey')) throw new Error('"privateKey" environment variable is required');
@@ -29,6 +33,8 @@ app.use('/api/courses', coursesRouter);
 app.use('/api/enrollments', enrollmentsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
+
+app.use(handlerInternalServerError);
 
 mongoose.connect('mongodb://localhost/rest-api', () => {
   const PORT = process.env.PORT || 5000;
