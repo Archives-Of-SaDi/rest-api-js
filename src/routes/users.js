@@ -3,8 +3,14 @@ const { StatusCodes } = require('http-status-codes')
 const { User, validateUser } = require('../models/user');
 const { genSalt, hash } = require('bcrypt');
 const { pick } = require('lodash');
+const { auth } = require('../middlewares/auth');
 
 const router = Router();
+
+router.get('/me', auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select('-password');
+  res.status(StatusCodes.OK).send(user);
+})
 
 router.post('/', async (req, res) => {
   const { error } = validateUser(req.body);
