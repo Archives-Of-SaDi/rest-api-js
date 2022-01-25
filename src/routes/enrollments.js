@@ -4,6 +4,8 @@ const { StatusCodes } = require('http-status-codes')
 const { Enrollment, validateEnrollment } = require('../models/enrollment');
 const { Course } = require('../models/course');
 const { Customer } = require('../models/customer');
+const { auth } = require('../middlewares/auth');
+const { admin } = require('../middlewares/admin');
 
 const router = Router();
 
@@ -19,7 +21,7 @@ router.get('/:id', async (req, res) => {
   res.status(StatusCodes.OK).send(enrollment);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   if (!isValid(req.body.customerId)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
   const customer = await Customer.findById(req.body.customerId);
   if (!customer) return res.status(StatusCodes.NOT_FOUND).send('Customer not found');
@@ -52,7 +54,7 @@ router.post('/', async (req, res) => {
   res.status(StatusCodes.OK).send(enrollment);
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   if (!isValid(req.params.id)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
 
   if (!isValid(req.body.customerId)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
@@ -82,7 +84,7 @@ router.put('/:id', async (req, res) => {
   res.status(StatusCodes.OK).send(course)
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, admin, async (req, res) => {
   if (!isValid(req.params.id)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
   let course = await Enrollment.findByIdAndRemove(req.params.id);
   if (!course) return res.status(StatusCodes.NOT_FOUND).send('Course not found');

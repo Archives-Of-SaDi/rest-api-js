@@ -2,6 +2,8 @@ const { Types: { ObjectId: { isValid } } } = require('mongoose');
 const { Router } = require('express');
 const { StatusCodes } = require('http-status-codes')
 const { Customer, validateCustomer } = require('../models/customer');
+const { auth } = require('../middlewares/auth');
+const { admin } = require('../middlewares/admin');
 
 const router = Router();
 
@@ -17,7 +19,7 @@ router.get('/:id', async (req, res) => {
   res.status(StatusCodes.OK).send(customer);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { error } = validateCustomer(req.body);
   if (error) return res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
 
@@ -32,7 +34,7 @@ router.post('/', async (req, res) => {
   res.status(StatusCodes.CREATED).send(customer);
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   if (!isValid(req.params.id)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
 
   const { error } = validateCustomer(req.body);
@@ -50,7 +52,7 @@ router.put('/:id', async (req, res) => {
   res.status(StatusCodes.OK).send(customer);
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, admin, async (req, res) => {
   if (!isValid(req.params.id)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
   let customer = await Customer.findByIdAndRemove(req.params.id);
   if (!customer) return res.status(StatusCodes.NOT_FOUND).send('Customer not found');

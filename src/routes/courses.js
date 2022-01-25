@@ -3,6 +3,8 @@ const { Router } = require('express');
 const { StatusCodes } = require('http-status-codes')
 const { Course, validateCourse } = require('../models/course');
 const { Category } = require('../models/category');
+const { auth } = require('../middlewares/auth');
+const { admin } = require('../middlewares/admin');
 
 const router = Router();
 
@@ -18,7 +20,7 @@ router.get('/:id', async (req, res) => {
   res.status(StatusCodes.OK).send(course);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   if (!isValid(req.body.categoryId)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
   const category = await Category.findById(req.body.categoryId);
   if (!category) return res.status(StatusCodes.NOT_FOUND).send('Category not found');
@@ -43,7 +45,7 @@ router.post('/', async (req, res) => {
   res.status(StatusCodes.OK).send(course);
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   if (!isValid(req.params.id)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
 
   if (!isValid(req.body.categoryId)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
@@ -69,7 +71,7 @@ router.put('/:id', async (req, res) => {
   res.status(StatusCodes.OK).send(course)
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, admin, async (req, res) => {
   if (!isValid(req.params.id)) return res.status(StatusCodes.BAD_REQUEST).send('Invalid id');
   let course = await Course.findByIdAndRemove(req.params.id);
   if (!course) return res.status(StatusCodes.NOT_FOUND).send('Course not found');
