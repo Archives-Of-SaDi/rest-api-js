@@ -7,7 +7,10 @@ require('express-async-errors');
 const { handlerInternalServerError } = require('./middlewares/handlerInternalServerError');
 
 // Verifying configs
-if (!config.get('jwtPrivateKey')) throw new Error('"privateKey" environment variable is required');
+if (!config.get('jwtPrivateKey')) {
+  console.log('"privateKey" environment variable is required');
+  process.exit(1);
+}
 
 // Import routes
 const rootRouter = require('./routes/root');
