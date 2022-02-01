@@ -17,6 +17,13 @@ winston.add(new winston.transports.Console());
 winston.add(new winston.transports.File({ filename: 'logs/error.log', level: 'error' }));
 winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/rest-api-logs', level: 'info' }));
 
+// Error handler
+winston.exceptions.handle(new winston.transports.File({ filename: 'logs/error.log' }));
+
+process.on('unhandledRejection', ex => {
+  throw ex;
+})
+
 // Verifying configs
 if (!config.get('jwtPrivateKey')) {
   console.log('"privateKey" environment variable is required');
