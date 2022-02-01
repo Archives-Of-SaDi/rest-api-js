@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const config = require('config');
 const winston = require('winston');
 require('express-async-errors');
+require('winston-mongodb');
 
 // Some modules
 const { handlerInternalServerError } = require('./middlewares/handlerInternalServerError');
@@ -28,6 +29,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 winston.add(new winston.transports.File({ filename: 'logs/error.log' }));
+winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/rest-api-logs' }));
 
 // Routes
 app.use('/', rootRouter);
