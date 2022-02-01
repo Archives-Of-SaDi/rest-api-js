@@ -8,10 +8,14 @@ require('winston-mongodb');
 // Some modules
 const { handlerInternalServerError } = require('./middlewares/handlerInternalServerError');
 
+// Constants
+const app = express();
+
 // Middleware
 app.use(express.json());
-winston.add(new winston.transports.File({ filename: 'logs/error.log' }));
-winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/rest-api-logs' }));
+winston.add(new winston.transports.Console());
+winston.add(new winston.transports.File({ filename: 'logs/error.log', level: 'error' }));
+winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/rest-api-logs', level: 'info' }));
 
 // Verifying configs
 if (!config.get('jwtPrivateKey')) {
@@ -28,9 +32,6 @@ const enrollmentsRouter = require('./routes/enrollments');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 
-// Constants
-const app = express();
-
 // Routes
 app.use('/', rootRouter);
 app.use('/api/categories', categoriesRouter);
@@ -45,5 +46,5 @@ app.use(handlerInternalServerError);
 
 mongoose.connect('mongodb://localhost/rest-api', () => {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`Server has been started on ${PORT} port`));
+  app.listen(PORT, () => winston.info(`Server has been started on ${PORT} port`));
 })
