@@ -8,6 +8,11 @@ require('winston-mongodb');
 // Some modules
 const { handlerInternalServerError } = require('./middlewares/handlerInternalServerError');
 
+// Middleware
+app.use(express.json());
+winston.add(new winston.transports.File({ filename: 'logs/error.log' }));
+winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/rest-api-logs' }));
+
 // Verifying configs
 if (!config.get('jwtPrivateKey')) {
   console.log('"privateKey" environment variable is required');
@@ -25,11 +30,6 @@ const authRouter = require('./routes/auth');
 
 // Constants
 const app = express();
-
-// Middleware
-app.use(express.json());
-winston.add(new winston.transports.File({ filename: 'logs/error.log' }));
-winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/rest-api-logs' }));
 
 // Routes
 app.use('/', rootRouter);
