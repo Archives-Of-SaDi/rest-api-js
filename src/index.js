@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
+const winston = require('winston');
 require('express-async-errors');
 
 // Some modules
@@ -26,6 +27,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+winston.add(new winston.transports.File({ filename: 'logs/error.log' }));
 
 // Routes
 app.use('/', rootRouter);
