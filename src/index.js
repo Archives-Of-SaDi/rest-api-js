@@ -62,7 +62,7 @@ app.use('/api/auth', authRouter);
 
 app.use(handlerInternalServerError);
 
-mongoose.connect('mongodb://localhost/rest-api', () => {
+mongoose.connect(config.get('db'), () => {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () =>
     winston.info(`Server has been started on ${PORT} port`)
