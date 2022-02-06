@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/github/languages/code-size/sad1go0/rest-api-js?style=flat-square" />
   <img src="https://img.shields.io/github/package-json/v/sad1go0/rest-api-js?color=green&logo=Node.js&style=flat-square" />
 <p>
-<h2>From Farkhod Dadajanov's <a target="_blank" href="https://youtube.com/playlist?list=PL_WK6W0Gn1I6Z5UbiXgsK7j7oiKCV7vg6">course</a></h2>
+<p>From Farkhod Dadajanov's <a target="_blank" href="https://youtube.com/playlist?list=PL_WK6W0Gn1I6Z5UbiXgsK7j7oiKCV7vg6">course</a></p>
 
 <h2>Usage</h2>
 <ol>
