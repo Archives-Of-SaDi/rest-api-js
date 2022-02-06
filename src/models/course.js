@@ -7,7 +7,7 @@ const courseSchema = new Schema({
     required: true,
     trim: true,
     minlength: 3,
-    maxlength: 255
+    maxlength: 255,
   },
   category: {
     type: new Schema({
@@ -15,28 +15,28 @@ const courseSchema = new Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 50
-      }
+        maxlength: 50,
+      },
     }),
-    required: true
+    required: true,
   },
   trainer: {
     type: String,
-    required: true
+    required: true,
   },
   tags: {
-    type: [String]
+    type: [String],
   },
   status: {
     type: String,
     enum: ['Active', 'Inactive'],
-    required: true
+    required: true,
   },
   fee: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const Course = model('course', courseSchema);
 
@@ -47,8 +47,8 @@ function validateCourse(course) {
     trainer: Joi.string().required(),
     status: Joi.string().required(),
     tags: Joi.array().items(Joi.string()),
-    fee: Joi.number().min(0)
-  })
+    fee: Joi.number().min(0),
+  });
 
   return schema.validate(course);
 }

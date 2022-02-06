@@ -6,7 +6,9 @@ require('express-async-errors');
 require('winston-mongodb');
 
 // Some modules
-const { handlerInternalServerError } = require('./middlewares/handlerInternalServerError');
+const {
+  handlerInternalServerError,
+} = require('./middlewares/handlerInternalServerError');
 
 // Constants
 const app = express();
@@ -14,15 +16,24 @@ const app = express();
 // Middleware
 app.use(express.json());
 winston.add(new winston.transports.Console());
-winston.add(new winston.transports.File({ filename: 'logs/error.log', level: 'error' }));
-winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/rest-api-logs', level: 'info' }));
+winston.add(
+  new winston.transports.File({ filename: 'logs/error.log', level: 'error' })
+);
+winston.add(
+  new winston.transports.MongoDB({
+    db: 'mongodb://localhost/rest-api-logs',
+    level: 'info',
+  })
+);
 
 // Error handler
-winston.exceptions.handle(new winston.transports.File({ filename: 'logs/error.log' }));
+winston.exceptions.handle(
+  new winston.transports.File({ filename: 'logs/error.log' })
+);
 
 process.on('unhandledRejection', ex => {
   throw ex;
-})
+});
 
 // Verifying configs
 if (!config.get('jwtPrivateKey')) {
@@ -53,5 +64,7 @@ app.use(handlerInternalServerError);
 
 mongoose.connect('mongodb://localhost/rest-api', () => {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => winston.info(`Server has been started on ${PORT} port`));
-})
+  app.listen(PORT, () =>
+    winston.info(`Server has been started on ${PORT} port`)
+  );
+});

@@ -8,10 +8,10 @@ const enrollmentSchema = new Schema({
         type: String,
         required: true,
         minlength: 5,
-        maxlength: 50
-      }
+        maxlength: 50,
+      },
     }),
-    required: true
+    required: true,
   },
   course: {
     type: new Schema({
@@ -20,29 +20,29 @@ const enrollmentSchema = new Schema({
         required: true,
         trim: true,
         minlength: 3,
-        maxlength: 255
-      }
+        maxlength: 255,
+      },
     }),
-    required: true
+    required: true,
   },
   dateStart: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now,
   },
   courseFee: {
     type: Number,
-    min: 0
-  }
-})
+    min: 0,
+  },
+});
 
 const Enrollment = model('enrollment', enrollmentSchema);
 
 function validateEnrollment(enrollment) {
   const schema = Joi.object({
     customerId: Joi.string().required(),
-    courseId: Joi.string().required()
-  })
+    courseId: Joi.string().required(),
+  });
 
   return schema.validate(enrollment);
 }
