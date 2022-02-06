@@ -43,6 +43,9 @@
     "winston-mongodb": "^5.0.7"
   },
   "devDependencies": {
+    "eslint": "^8.8.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
     "pnpm": "^6.29.1",
