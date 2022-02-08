@@ -8,8 +8,8 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "jest --watchAll --coverage",
-    "lint": "eslint ./src/",
-    "format": "prettier -c ./src/"
+    "lint": "eslint ./",
+    "format": "prettier -c ./"
   },
   "repository": {
     "type": "git",
