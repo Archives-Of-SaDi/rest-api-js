@@ -9,7 +9,7 @@
     "dev": "nodemon src/index.js",
     "test": "jest --watchAll --coverage",
     "lint": "eslint ./src/",
-    "pret": "prettier -c ./src/"
+    "format": "prettier -c ./src/"
   },
   "repository": {
     "type": "git",
