@@ -4,6 +4,7 @@
   <a target="_blank" href="https://www.javascript.com"><img src="https://img.shields.io/github/languages/top/sad1go0/rest-api-js?color=yellow&logo=JavaScript&style=flat-square" /></a>
   <img src="https://img.shields.io/github/languages/code-size/sad1go0/rest-api-js?style=flat-square" />
   <img src="https://img.shields.io/github/package-json/v/sad1go0/rest-api-js?color=green&logo=Node.js&style=flat-square" />
+  <br />
   <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square" />
   <img src="https://img.shields.io/github/workflow/status/sad1go0/rest-api-js/lint?label=lint&style=flat-square" />
   <img src="https://img.shields.io/github/workflow/status/sad1go0/rest-api-js/format?label=format&style=flat-square" />
