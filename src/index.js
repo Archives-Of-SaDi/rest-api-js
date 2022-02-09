@@ -62,9 +62,11 @@ app.use('/api/auth', authRouter);
 
 app.use(handlerInternalServerError);
 
+const PORT = process.env.PORT || 5000;
+const server = app.listen(PORT);
+
 mongoose.connect(config.get('db'), () => {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () =>
-    winston.info(`Server has been started on ${PORT} port`)
-  );
+  winston.info(`Server has been started on ${PORT} port`);
 });
+
+module.exports = server;
