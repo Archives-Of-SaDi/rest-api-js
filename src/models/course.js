@@ -47,7 +47,7 @@ function validateCourse(course) {
     trainer: Joi.string().required(),
     status: Joi.string().required(),
     tags: Joi.array().items(Joi.string()),
-    fee: Joi.number().min(0),
+    fee: Joi.number().min(0).required(),
   });
 
   return schema.validate(course);
