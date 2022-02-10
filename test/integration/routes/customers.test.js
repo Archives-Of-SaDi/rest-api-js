@@ -6,8 +6,10 @@ const { StatusCodes } = require('http-status-codes');
 const { Customer } = require('../../../src/models/customer');
 const { User } = require('../../../src/models/user');
 
+const API = '/api/customers';
 let server;
-describe('/api/customers', () => {
+
+describe(API, () => {
   beforeEach(() => {
     server = require('../../../src/index');
   });
@@ -37,7 +39,7 @@ describe('/api/customers', () => {
         },
       ]);
 
-      const response = await request(server).get('/api/customers');
+      const response = await request(server).get(API);
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body.length).toBe(3);
       expect(response.body.some(c => c.name === 'Customer 1')).toBeTruthy();
@@ -48,13 +50,13 @@ describe('/api/customers', () => {
 
   describe('GET /:id', () => {
     it('should return 400 if invalid id is given', async () => {
-      const response = await request(server).get('/api/customers/test');
+      const response = await request(server).get(`${API}/test`);
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it('should return 404 if invalid id is given', async () => {
       const customer = mongoose.Types.ObjectId();
-      const response = await request(server).get(`/api/customers/${customer}`);
+      const response = await request(server).get(`${API}/${customer}`);
       expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -66,9 +68,7 @@ describe('/api/customers', () => {
       });
       await customer.save();
 
-      const response = await request(server).get(
-        `/api/customers/${customer._id}`
-      );
+      const response = await request(server).get(`${API}/${customer._id}`);
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body).toHaveProperty('_id');
       expect(response.body).toHaveProperty('name', 'Customer 1');
@@ -83,7 +83,7 @@ describe('/api/customers', () => {
 
     const execute = async () => {
       return await request(server)
-        .post('/api/customers')
+        .post(API)
         .set('x-auth-token', token)
         .send(customer);
     };
@@ -187,7 +187,7 @@ describe('/api/customers', () => {
       const customerId = mongoose.Types.ObjectId();
 
       return await request(server)
-        .put(`/api/customers/${customerId}`)
+        .put(`${API}/${customerId}`)
         .set('x-auth-token', token)
         .send(customer);
     };
@@ -198,13 +198,13 @@ describe('/api/customers', () => {
     });
 
     it('should return 400 if invalid id is given', async () => {
-      const response = await request(server).get('/api/customers/test');
+      const response = await request(server).get(`${API}/test`);
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it('should return 404 if invalid id is given', async () => {
       customer = mongoose.Types.ObjectId();
-      const response = await request(server).get(`/api/customers/${customer}`);
+      const response = await request(server).get(`${API}/${customer}`);
       expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -216,9 +216,7 @@ describe('/api/customers', () => {
       });
       await customer.save();
 
-      const response = await request(server).get(
-        `/api/customers/${customer._id}`
-      );
+      const response = await request(server).get(`${API}/${customer._id}`);
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body).toHaveProperty('_id');
       expect(response.body).toHaveProperty('name', 'Customer 1');
@@ -307,7 +305,7 @@ describe('/api/customers', () => {
       };
 
       const response = await request(server)
-        .put(`/api/customers/${customer._id}`)
+        .put(`${API}/${customer._id}`)
         .set('x-auth-token', token)
         .send(newCustomer);
 
@@ -330,13 +328,13 @@ describe('/api/customers', () => {
     });
 
     it('should return 400 if invalid id is given', async () => {
-      const response = await request(server).get('/api/customers/test');
+      const response = await request(server).get(`${API}/test`);
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it('should return 404 if invalid id is given', async () => {
       const customer = mongoose.Types.ObjectId();
-      const response = await request(server).get(`/api/customers/${customer}`);
+      const response = await request(server).get(`${API}/${customer}`);
       expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -354,7 +352,7 @@ describe('/api/customers', () => {
       await customer.save();
 
       const response = await request(server)
-        .delete(`/api/customers/${customer._id}`)
+        .delete(`${API}/${customer._id}`)
         .set('x-auth-token', token);
 
       expect(response.status).toBe(StatusCodes.FORBIDDEN);
@@ -369,7 +367,7 @@ describe('/api/customers', () => {
       await customer.save();
 
       const response = await request(server)
-        .delete(`/api/customers/${customer._id}`)
+        .delete(`${API}/${customer._id}`)
         .set('x-auth-token', token);
 
       expect(response.status).toBe(StatusCodes.OK);

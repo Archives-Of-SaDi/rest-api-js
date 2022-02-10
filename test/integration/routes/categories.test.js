@@ -6,8 +6,10 @@ const { StatusCodes } = require('http-status-codes');
 const { Category } = require('../../../src/models/category');
 const { User } = require('../../../src/models/user');
 
+const API = '/api/categories';
 let server;
-describe('/api/categories', () => {
+
+describe(API, () => {
   beforeEach(() => {
     server = require('../../../src/index');
   });
@@ -25,7 +27,7 @@ describe('/api/categories', () => {
         { name: 'Category 3' },
       ]);
 
-      const response = await request(server).get('/api/categories');
+      const response = await request(server).get(API);
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body.length).toBe(3);
       expect(response.body.some(c => c.name === 'Category 1')).toBeTruthy();
@@ -34,13 +36,13 @@ describe('/api/categories', () => {
 
   describe('GET /:id', () => {
     it('should return 400 if invalid id is given', async () => {
-      const response = await request(server).get('/api/categories/test');
+      const response = await request(server).get(`${API}/test`);
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it('should return 404 if invalid id is given', async () => {
       const category = mongoose.Types.ObjectId();
-      const response = await request(server).get(`/api/categories/${category}`);
+      const response = await request(server).get(`${API}/${category}`);
       expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -48,9 +50,7 @@ describe('/api/categories', () => {
       const category = new Category({ name: 'Category 1' });
       await category.save();
 
-      const response = await request(server).get(
-        `/api/categories/${category._id}`
-      );
+      const response = await request(server).get(`${API}/${category._id}`);
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body).toHaveProperty('_id');
       expect(response.body).toHaveProperty('name', 'Category 1');
@@ -63,7 +63,7 @@ describe('/api/categories', () => {
 
     const execute = async () => {
       return await request(server)
-        .post('/api/categories')
+        .post(API)
         .set('x-auth-token', token)
         .send(category);
     };
@@ -79,13 +79,13 @@ describe('/api/categories', () => {
       expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return 400 if category is less than 3 characters', async () => {
+    it('should return 400 if name is less than 3 characters', async () => {
       category = { name: 'Ca' };
       const response = await execute();
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    it('should return 400 if category is more than 50 characters', async () => {
+    it('should return 400 if name is more than 50 characters', async () => {
       category = { name: new Array(52).join('a') };
       const response = await execute();
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -113,7 +113,7 @@ describe('/api/categories', () => {
       const categoryId = mongoose.Types.ObjectId();
 
       return await request(server)
-        .put(`/api/categories/${categoryId}`)
+        .put(`${API}/${categoryId}`)
         .set('x-auth-token', token)
         .send(category);
     };
@@ -124,13 +124,13 @@ describe('/api/categories', () => {
     });
 
     it('should return 400 if invalid id is given', async () => {
-      const response = await request(server).get('/api/categories/test');
+      const response = await request(server).get(`${API}/test`);
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it('should return 404 if invalid id is given', async () => {
       category = mongoose.Types.ObjectId();
-      const response = await request(server).get(`/api/categories/${category}`);
+      const response = await request(server).get(`${API}/${category}`);
       expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -138,9 +138,7 @@ describe('/api/categories', () => {
       category = new Category({ name: 'Category 1' });
       await category.save();
 
-      const response = await request(server).get(
-        `/api/categories/${category._id}`
-      );
+      const response = await request(server).get(`${API}/${category._id}`);
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body).toHaveProperty('_id');
       expect(response.body).toHaveProperty('name', 'Category 1');
@@ -171,7 +169,7 @@ describe('/api/categories', () => {
       const newCategory = { name: 'Category 2' };
 
       const response = await request(server)
-        .put(`/api/categories/${category._id}`)
+        .put(`${API}/${category._id}`)
         .set('x-auth-token', token)
         .send(newCategory);
 
@@ -192,13 +190,13 @@ describe('/api/categories', () => {
     });
 
     it('should return 400 if invalid id is given', async () => {
-      const response = await request(server).get('/api/categories/test');
+      const response = await request(server).get(`${API}/test`);
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it('should return 404 if invalid id is given', async () => {
-      category = mongoose.Types.ObjectId();
-      const response = await request(server).get(`/api/categories/${category}`);
+      const category = mongoose.Types.ObjectId();
+      const response = await request(server).get(`${API}/${category}`);
       expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -212,7 +210,7 @@ describe('/api/categories', () => {
       await category.save();
 
       const response = await request(server)
-        .delete(`/api/categories/${category._id}`)
+        .delete(`${API}/${category._id}`)
         .set('x-auth-token', token);
 
       expect(response.status).toBe(StatusCodes.FORBIDDEN);
@@ -223,7 +221,7 @@ describe('/api/categories', () => {
       await category.save();
 
       const response = await request(server)
-        .delete(`/api/categories/${category._id}`)
+        .delete(`${API}/${category._id}`)
         .set('x-auth-token', token);
 
       expect(response.status).toBe(StatusCodes.OK);
