@@ -6,10 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "test": "jest --watchAll --coverage",
-    "lint": "eslint ./",
-    "fmt": "prettier -c ./"
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -23,35 +20,30 @@
     "api"
   ],
   "author": {
-    "name": "Sayidulloh Abbasov",
+    "name": "SaDi",
     "email": "sayidullohabbasov0909@gmail.com",
-    "url": "https://github.com/sad1go0"
+    "url": "https://github.com/SaDi-BRo"
   },
   "homepage": "https://github.com/https://github.com/sad1go0/rest-api-js/#readme",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "compression": "^1.7.4",
-    "config": "^3.3.7",
-    "express": "^4.17.3",
+    "config": "^3.3.8",
+    "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
-    "helmet": "^5.0.2",
+    "helmet": "^6.0.0",
     "http-status-codes": "^2.2.0",
-    "joi": "^17.6.0",
+    "joi": "^17.6.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "mongoose": "^6.3.0",
-    "winston": "^3.7.2",
-    "winston-mongodb": "^5.0.7"
+    "mongoose": "^6.6.1",
+    "winston": "^3.8.2",
+    "winston-mongodb": "^5.1.0"
   },
   "devDependencies": {
-    "eslint": "^8.13.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "jest": "^27.5.1",
-    "nodemon": "^2.0.15",
-    "pnpm": "^6.32.7",
-    "prettier": "^2.6.2",
-    "supertest": "^6.2.2"
+    "jest": "^29.0.3",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.2.4"
   }
 }
