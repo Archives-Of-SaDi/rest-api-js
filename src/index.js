@@ -65,8 +65,13 @@ app.use(handlerInternalServerError);
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
 
-mongoose.connect(config.get('db'), () => {
-  winston.info(`Server has been started on ${PORT} port`);
-});
+mongoose
+  .connect(config.get('db'))
+  .then(() => {
+    winston.info(`Server has been started on ${PORT} port`);
+  })
+  .catch(r => {
+    winston.info("Couldn't start");
+  });
 
 module.exports = server;
