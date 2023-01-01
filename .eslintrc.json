@@ -27,6 +27,7 @@
     "no-undef": "off",
     "global-require": "off",
     "arrow-body-style": "off",
-    "no-return-await": "off"
+    "no-return-await": "off",
+    "linebreak-style": "off"
   }
 }
